@@ -1,0 +1,4 @@
+[Event/kAudioSwiNotification]
+Name=Switch Audio
+Comment=Default audio output was changed
+Action=Popup

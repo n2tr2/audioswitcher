@@ -1,0 +1,18 @@
+{
+  "KPlugin": {
+    "Name": "Switch Audio",
+    "Version": "0.1",
+    "EnabledByDefault": true,
+    "Authors": [
+      {
+        "Email": "your.name@mail.com",
+        "Name": "n2tr2"
+      }
+    ],
+    "Icon": "audio-symbolic",
+    "Description": "Helps to quickly change active audio inputs/outputs",
+    "License": "",
+    "Website": "https://github.com/n2tr2"
+  },
+  "X-Plasma-Runner-Weak-Results": false
+}
