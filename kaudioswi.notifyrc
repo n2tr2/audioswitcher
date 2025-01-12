@@ -1,4 +1,16 @@
-[Event/kAudioSwiNotification]
-Name=Switch Audio
+[Global]
+Name=Switch Audio Output
+
+[Event/kAudioSwitcherFailedNotification]
+Name=Audio Output Change Failed
+Comment=Default audio output was not changed
+Action=Popup
+Urgency=Normal
+Icon-Name=audio-off-symbolic
+
+[Event/kAudioSwitcherNotification]
+Name=Audio Output Changed
 Comment=Default audio output was changed
 Action=Popup
+Urgency=Normal
+Icon-Name=audio-on-symbolic

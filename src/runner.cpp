@@ -5,6 +5,7 @@
 #include <QLoggingCategory>
 #include <QMediaDevices>
 #include <QProcess>
+#include <qstringliteral.h>
 
 Q_LOGGING_CATEGORY(RUNNER, "org.kde.krunner.kaudioswi");
 
@@ -17,28 +18,32 @@ const auto kIconNameAudioOn = QStringLiteral("audio-on-symbolic");
 const auto kKeyWord = QStringLiteral("to ");
 const auto kMatchFormat = QStringLiteral("%1 %2").arg(kKeyWord);
 
-const auto kComponentName = QStringLiteral("Switch Audio");
+const auto kComponentName = QStringLiteral("kaudioswi");
+const auto kNotificationTitle = QStringLiteral("Switch Audio Output");
+
+const auto kNotificationTypeWarning = QStringLiteral("kAudioSwitcherFailedNotification");
+const auto kNotificationTypeSuccess = QStringLiteral("kAudioSwitcherNotification");
 } // namespace
 
 namespace
 {
 void showNotification(const QString &title, const QString &body, const bool isWarning)
 {
-    auto *notif = new KNotification(QStringLiteral("kAudioSwiNotification"), KNotification::CloseOnTimeout);
-    notif->setComponentName(kComponentName);
-    notif->setTitle(kComponentName);
-    notif->setTitle(title);
-    notif->setText(body);
-    notif->setIconName(isWarning ? kIconNameAudioOff : kIconNameAudioOn);
-    notif->sendEvent();
+    auto notif =
+        KNotification(isWarning ? kNotificationTypeWarning : kNotificationTypeSuccess, KNotification::CloseOnTimeout);
+    notif.setComponentName(kComponentName);
+    notif.setTitle(title);
+    notif.setText(body);
+    notif.setIconName(isWarning ? kIconNameAudioOff : kIconNameAudioOn);
+    notif.sendEvent();
 }
-} // namespace
+}
 
 KAudioSwiRunner::KAudioSwiRunner(QObject *parent, const KPluginMetaData &data)
     : AbstractRunner(parent, data)
 {
     qCDebug(RUNNER) << "ctor";
-    setObjectName(QStringLiteral("kaudioswi"));
+    setObjectName(kComponentName);
     addSyntax(KRunner::RunnerSyntax(QLatin1String("to <output name>"),
                                     QLatin1String("Change the default audio output to a selected sink")));
 }
@@ -108,7 +113,8 @@ void KAudioSwiRunner::run(const KRunner::RunnerContext &context, const KRunner::
 
     const auto &items = match.data().toStringList();
     if (items.length() != 2) {
-        qCWarning(RUNNER) << "invalid match data, length [" << items.length() << "]";
+        qCWarning(RUNNER) << "invalid match data: " << items;
+        return;
     }
 
     const auto &id = items[0];
@@ -123,6 +129,8 @@ void KAudioSwiRunner::run(const KRunner::RunnerContext &context, const KRunner::
     if (p.exitStatus() != QProcess::NormalExit || p.exitCode() != 0) {
         qCWarning(RUNNER) << "failed to change default sink with error [" << p.exitCode() << "]";
         showNotification(name, QStringLiteral("Failed to change default audio output"), true);
+    } else {
+        showNotification(name, QStringLiteral("Default output was changed"), false);
     }
 }
 

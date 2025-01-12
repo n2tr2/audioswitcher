@@ -1,16 +1,17 @@
 {
+  "$schema": "https://autoconfig.kde.org/jsonschemas/krunner.schema.json",
   "KPlugin": {
-    "Name": "Switch Audio",
+    "Name": "Switch Audio Output",
     "Version": "0.1",
     "EnabledByDefault": true,
     "Authors": [
       {
-        "Email": "your.name@mail.com",
+        "Email": "n2tr2@fastmail.com",
         "Name": "n2tr2"
       }
     ],
     "Icon": "audio-symbolic",
-    "Description": "Helps to quickly change active audio inputs/outputs",
+    "Description": "Helps to quickly change the active audio output",
     "License": "",
     "Website": "https://github.com/n2tr2"
   },
